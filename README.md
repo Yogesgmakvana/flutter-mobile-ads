@@ -69,7 +69,9 @@ Add your AdMob Application ID inside the `<application>` tag of `android/app/src
 </manifest>
 ```
 
-![Android Manifest AdMob ID](img.png)
+<p align="center">
+  <img src="img.png" alt="Android Manifest AdMob ID" width="220" />
+</p>
 
 ---
 
@@ -93,10 +95,15 @@ It is critical to distinguish between your **AdMob App ID** and individual **Ad 
 | **App ID** | `~` (tilde) | `ca-app-pub-3940256099942544~3347511713` | Manifest / Info.plist |
 | **Ad Unit ID** | `/` (slash) | `ca-app-pub-3940256099942544/5224354917` | Flutter Code (`AdHelper`) |
 
-![App ID vs Ad Unit ID Differences](img_1.png)
-![Ad Unit Format Differences](img_2.png)
-![AdMob Console Setup](img_3.png)
-![Ad Format Types](img_4.png)
+<p align="center">
+  <img src="img_1.png" alt="App ID vs Ad Unit ID Differences" width="180" />
+  &nbsp;
+  <img src="img_2.png" alt="Ad Unit Format Differences" width="180" />
+  &nbsp;
+  <img src="img_3.png" alt="AdMob Console Setup" width="180" />
+  &nbsp;
+  <img src="img_4.png" alt="Ad Format Types" width="180" />
+</p>
 
 ---
 
