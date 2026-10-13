@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'ads/banner_ad_widget.dart';
 import 'ads/interstitial_ad_manager.dart';
+import 'ads/rewarded_ad_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,15 +11,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final InterstitialAdManager interstitial =
-  InterstitialAdManager();
+  final InterstitialAdManager interstitial = InterstitialAdManager();
+  final RewardedAdManager rewardedAdManager = RewardedAdManager();
+
+  int coins = 0;
 
   @override
   void initState() {
     super.initState();
 
-    // Load interstitial ad when screen opens
+    // Load interstitial and rewarded ads when screen opens
     interstitial.loadAd();
+    rewardedAdManager.loadAd();
   }
 
   void onNextButtonPressed() {
@@ -36,9 +39,41 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void onWatchAdButtonPressed() {
+    if (!rewardedAdManager.isAdLoaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ad is loading, please try again in a moment.'),
+        ),
+      );
+      rewardedAdManager.loadAd();
+      return;
+    }
+
+    rewardedAdManager.showAd(
+      onUserEarnedReward: (reward) {
+        if (!mounted) return;
+
+        setState(() {
+          coins += 10;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Congratulations! You earned 10 coins!'),
+          ),
+        );
+      },
+      onAdDismissed: () {
+        // Ad dismissed callback
+      },
+    );
+  }
+
   @override
   void dispose() {
     interstitial.dispose();
+    rewardedAdManager.dispose();
     super.dispose();
   }
 
@@ -48,6 +83,24 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home Screen'),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.monetization_on, color: Colors.amber),
+                const SizedBox(width: 4),
+                Text(
+                  '$coins Coins',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -60,6 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: onNextButtonPressed,
               child: const Text('Interstitial Ads'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: onWatchAdButtonPressed,
+              child: const Text('watch vedio and earn 10 coin'),
             ),
           ],
         ),
